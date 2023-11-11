@@ -2,7 +2,7 @@
 <?php
 
 define('LARAVEL_START', microtime(true));
-
+#edits
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
