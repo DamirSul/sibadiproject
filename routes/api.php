@@ -31,3 +31,4 @@ Route::resource('/rooms', \App\Http\Controllers\RoomController::class)->middlewa
 Route::post('/rooms/enter/{room}', [App\Http\Controllers\RoomController::class, 'enter'])->middleware('auth:sanctum');
 //Route::get('/list', [\App\Http\Controllers\RoomController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/me', \App\Http\Controllers\MeController::class)->middleware('auth:sanctum');
+Route::get('/rooms/leave/{room}', [\App\Http\Controllers\RoomController::class, 'leave'])->middleware('auth:sanctum');

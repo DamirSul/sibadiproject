@@ -14,10 +14,13 @@ class Room extends Model
       'type',
       'capacity',
       'name',
+        'is_active',
     ];
 
     public function user()
     {
         return $this ->belongsToMany(User::class);
     }
+
+
 }

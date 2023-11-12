@@ -65,7 +65,8 @@ class RoomController extends Controller
                 'name' => $name,
                 'capacity' => $capacity,
                 'type' => $type,
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'is_active' => true,
             ]);
 
             return response()->json($newRoom, 201); // Возвращаем созданную комнату с кодом 201 (Created)
@@ -113,10 +114,16 @@ class RoomController extends Controller
         if ($room->capacity === $user -> rooms->count()) {
             return response()->json(['message' => "fail, room is full"]);
         }
-        $user ->rooms()->attach($room->id);
+
+        $user -> rooms() -> attach($room->id);
         //detach
 
         return response()->json(['message' => 'success']);
     }
 
+    public function leave(Room $room, Request $request){
+        $user = auth() -> user();
+        $user -> rooms() -> detach($room->id);
+        return response()->json(['message' => 'successfully leave']);
+    }
 }
