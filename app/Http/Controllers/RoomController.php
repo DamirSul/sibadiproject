@@ -54,7 +54,7 @@ class RoomController extends Controller
         $capacity=$request->get('capacity');
         $type=$request->get('type');
         $user_id=auth()->user()->id;
-        $existingRoom = Room::where('user_id', $user_id)->first(); //используется для выполнения запроса к базе данных с целью проверки наличия комнаты для конкретного пользователя
+        $existingRoom = Room::where('user_id', $user_id)->exists(); //используется для выполнения запроса к базе данных с целью проверки наличия комнаты для конкретного пользователя
 
 
         if ($existingRoom) {
@@ -108,6 +108,15 @@ class RoomController extends Controller
         //$room->delete();
        return Room::where('id', $id)->delete();
     }
+    public function enter(Room $room, Request $request){
+        $user = auth() -> user();
+        if ($room->capacity === $user -> rooms->count()) {
+            return response()->json(['message' => "fail, room is full"]);
+        }
+        $user ->rooms()->attach($room->id);
+        //detach
 
+        return response()->json(['message' => 'success']);
+    }
 
 }
