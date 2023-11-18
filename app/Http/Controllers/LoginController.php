@@ -15,7 +15,7 @@ class LoginController extends Controller
         $login = $request->get('login');
         $user = User::where('login', $login)->FirstOrFail();
         if (Hash::check($password, $user->password)) {
-            $user->revoke(); // TODO revoke tokens
+           // $user->revoke(); // TODO revoke tokens
             return $user ->createToken("test")->plainTextToken;
         }
         return new \HttpException("Password is not correct", 403);

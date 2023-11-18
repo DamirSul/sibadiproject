@@ -1,7 +1,7 @@
 <?php
 
 use http\Client\Request;
-
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/registration', \App\Http\Controllers\RegisterController::class);
+//Route::post('/registration', \App\Http\Controllers\RegisterController::class);
 Route::group(['prefix'=>'auth'], function(){
    Route::post('/registration', \App\Http\Controllers\RegisterController::class);
    Route::post('/login', \App\Http\Controllers\LoginController::class);
@@ -28,6 +28,7 @@ Route::group(['prefix'=>'auth'], function(){
 
 //ROOMS
 Route::group(['prefix' => 'rooms', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('{room}/step', [RoomController::class, 'createStep']);
     Route::resource('/', RoomController::class);
     Route::post('/enter/{room}', [RoomController::class, 'enter']);
     Route::post('/leave/{room}', [RoomController::class, 'leave']);

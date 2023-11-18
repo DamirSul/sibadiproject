@@ -226,10 +226,28 @@ class RoomController extends Controller
         if (!blank($user->rooms)) {
             return response()->json(['message' => "You already in room"], 400);
         }
-        if ($room->capacity === $room->users->count()) {
+        $roomUsersCount = $room->users->count();
+        if ($room->capacity === $roomUsersCount) {
             return response()->json(['message' => "fail, room is full"], 400);
         }
         $user->rooms()->attach($room->id);
+        if ($room->capacity === $roomUsersCount + 1) {
+            // $room -> users -> pluck('id') -> shuffle() -> toArray();
+            $room->refresh();
+            $room->user_order = $room->users->pluck('id')->shuffle()->toArray();
+            $room->save();
+        }
         return response()->json(['message' => "success"]);
+    }
+
+    public function createStep(Room $room, Request $request)
+    {
+        $capacity = count($room->user_order);
+        $currentUserIndex = $capacity % $room -> steps ->count();
+        if ($room->user_order[$currentUserIndex] === auth()->user()->id){
+            $room -> steps ->create(['data' => $request->get('data')]);
+        }
+        //if($room->user_order, auth()->user()->id, $room ->steps->count());
+        return \response()->json(['message' => 'Not your queue']);
     }
 };
