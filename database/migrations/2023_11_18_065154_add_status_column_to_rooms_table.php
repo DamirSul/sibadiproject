@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('rooms', function (Blueprint $table) {
-            //
-            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['waiting', 'active', 'closed'])->default('waiting');
         });
     }
 
@@ -27,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('rooms', function (Blueprint $table) {
-            //
+            $table->dropColumn('status');
         });
     }
 };
